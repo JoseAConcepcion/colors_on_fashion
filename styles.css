@@ -2,12 +2,16 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 80px;
-  font-size: 25 px;
+  font-size: 25px;
   text-align: justify;
   margin-left: auto; /* Centrar el contenido */
   margin-right: auto; /* Centrar el contenido */
 }
 
+.container {
+    display: flex;
+    justify-content: flex-end;
+}
 
 .title {
   font-size: 84px;
@@ -21,33 +25,51 @@ body {
   display: none;
 }
 
-/* Mostrar imagen a partir de la sección de Desarrollo */
 .desarrollo .imagen {
   display: block;
-  flex: 0 0 40%; /* Ancho de la imagen, ajusta según sea necesario */
+  flex: 0 0 40%;
   position: sticky;
-  top: 10%;
+  top: 5%;
   bottom: 50%;
-  width: 50%;
+  width: 25%;
+  margin-right: 20px; /* Espacio entre la imagen y el texto */
+
 }
 
 .imagen img {
-  width: 50%;
+  width: 80%;
   height: auto;
 }
 
-.contenido {
+.desarrollo .contenido {
   flex: 1;
   padding: 20px;
-  background-color: #FFC0CB;
+  /* background-color: #FFC0CB; */
 }
 
-/* Cambio de color al hacer scroll */
-.cambio-color {
+.cambio-color .contenido{
   transition: 0.5s ease-in-out;
   background-color: #c0ffc4;
 }
 
 .cambio-color img {
-  filter: hue-rotate(180deg); /* Cambia el color de la imagen */
+  filter: hue-rotate(180deg);
+}
+
+
+.contenido {
+  flex: 1;
+  padding: 20px;
+  /* background-color: #FFC0CB; */
+}
+
+/* Estilos para la sección de Desarrollo */
+.desarrollo {
+  display: flex;
+  align-items: flex-start;
+}
+
+.desarrollo .contenido {
+  flex: 1;
+  text-align: justify; /* Justificar texto */
 }
