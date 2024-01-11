@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   margin: 0;
   padding: 80px;
   font-size: 25px;
@@ -7,6 +7,28 @@ body {
   margin-left: auto; /* Centrar el contenido */
   margin-right: auto; /* Centrar el contenido */
 }
+
+.imgCentered {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pie-pagina {
+      position: center;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      /* background-color: rgba(0, 0, 0, 0.7); */
+      color: rgb(13, 13, 13);
+      padding: 8px;
+  }
+
+.contenedor {
+          position: relative;
+          display: inline-block;
+      }
 
 .container {
     display: flex;
