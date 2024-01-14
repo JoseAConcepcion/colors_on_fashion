@@ -1,30 +1,37 @@
 window.addEventListener("scroll", function () {
   // let elemento = document.querySelector('.desarrollo');
   let elemento2 = document.querySelector(".contenido");
-  let imagen = document.querySelector(".imagen img");
+  let imagen = document.querySelector(".imagen");
   let scrollActual = window.scrollY;
 
-  if (scrollActual > 2000) {
-    let colorIndex = Math.floor(scrollActual / 1000); // Calcula el índice del color cada 100px
+  if (scrollActual > 1000) {
+    let colorIndex = Math.floor(scrollActual / 200); // Calcula el índice del color cada 100px
     let colors = [
-      // "#FFC0CB",
-      // "#c0ffc4",
-      // "orange",
-      // "blue",
-      // "red",
-      // "yellow",
-      // "green",
-      // "#FF6347",
-      // "yellow",
-    ]; // Colores adicionales
-    let color = colors[colorIndex % colors.length]; // Obtiene un color de la lista de colores
+      "gray",
+      "brown",
+      "white",
+      "black",
+      "orange",
+      "green",
+      "purple",
+      "blue",
+      "yellow",
+      "red",
+      "beige",
+      "pink",
+    ];
 
-    elemento2.style.backgroundColor = color;
+    // Asegúrate de que el índice no sea mayor que la longitud de la lista de colores
+    colorIndex = colorIndex % colors.length;
+
+    let color = colors[colorIndex]; // Obtiene un color de la lista de colores
+
+    // elemento2.style.backgroundColor = color;
     // elemento.style.backgroundColor = color;
-    // imagen.style.filter = `hue-rotate(${colorIndex * 30}deg)`;
+    imagen.style.filter = `hue-rotate(${colorIndex * 30}deg)`;
   } else {
-    // elemento.style.backgroundColor = ''; // Restaura el color por defecto
-    // elemento2.style.backgroundColor = ''; // Restaura el color por defecto
+    elemento.style.backgroundColor = ""; // Restaura el color por defecto
+    elemento2.style.backgroundColor = ""; // Restaura el color por defecto
   }
 });
 
@@ -80,7 +87,6 @@ const translateMapping = {
 // Obtener la cantidad de colores únicos y manejar cualquier error
 countUniqueColors(jsonPath)
   .then((uniqueColorCount) => {
-
     const Pasteldata = Object.entries(colorOccurrences).map(
       ([color, count]) => ({
         value: count,
@@ -132,12 +138,13 @@ countUniqueColors(jsonPath)
     console.error(error.message);
   });
 
-
-  async function getColorData(jsonPath) {
+async function getColorData(jsonPath) {
   const response = await fetch(jsonPath);
 
   if (!response.ok) {
-    throw new Error(`No se pudo cargar el archivo JSON. Código de estado: ${response.status}`);
+    throw new Error(
+      `No se pudo cargar el archivo JSON. Código de estado: ${response.status}`
+    );
   }
 
   const jsonData = await response.json();
@@ -151,7 +158,10 @@ countUniqueColors(jsonPath)
         for (const entry of entries) {
           const hexColors = entry.hex;
           for (const hexColor of hexColors) {
-            const colorData = [hexToNormalizedHue(hexColor), calculateLuminance(hexToRgb(hexColor))];
+            const colorData = [
+              hexToNormalizedHue(hexColor),
+              calculateLuminance(hexToRgb(hexColor)),
+            ];
             colorDataList.push(colorData);
           }
         }
@@ -163,10 +173,10 @@ countUniqueColors(jsonPath)
 }
 
 getColorData(jsonPath)
-  .then(colorDataList => {
+  .then((colorDataList) => {
     console.log("Lista de objetos de datos de colores:", colorDataList);
     echarts.registerTransform(ecStat.transform.clustering);
-   
+
     var CLUSTER_COUNT = 6;
     var DIENSIION_CLUSTER_INDEX = 2;
     var COLOR_ALL = [
@@ -182,7 +192,7 @@ getColorData(jsonPath)
     for (var i = 0; i < CLUSTER_COUNT; i++) {
       pieces.push({
         value: i,
-        label: "Conjunto " + (i+1),
+        label: "Conjunto " + (i + 1),
         color: COLOR_ALL[i],
       });
     }
@@ -194,7 +204,7 @@ getColorData(jsonPath)
         {
           transform: {
             type: "ecStat:clustering",
-            print: true,  
+            print: true,
             config: {
               clusterCount: CLUSTER_COUNT,
               outputType: "single",
@@ -217,9 +227,9 @@ getColorData(jsonPath)
         pieces: pieces,
       },
       grid: {
-        left: 'center',
-        width: '50%', // Puedes ajustar el ancho de la tabla según tus necesidades
-        height: '80%',
+        left: "center",
+        width: "50%", // Puedes ajustar el ancho de la tabla según tus necesidades
+        height: "80%",
       },
       xAxis: {
         name: "Calidez",
@@ -242,16 +252,13 @@ getColorData(jsonPath)
     // var option;
     option && myChart.setOption(option);
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error.message);
   });
 
-
-
-
 function hexToRgb(hex) {
   // Eliminar el carácter "#" si está presente
-  hex = hex.replace(/^#/, '');
+  hex = hex.replace(/^#/, "");
 
   // Convertir el código hexadecimal a valores RGB normalizados
   const bigint = parseInt(hex, 16);
@@ -270,7 +277,7 @@ function calculateLuminance(rgb) {
 
 function hexToNormalizedHue(hex) {
   // Eliminar el carácter "#" si está presente
-  hex = hex.replace(/^#/, '');
+  hex = hex.replace(/^#/, "");
 
   // Convertir el código hexadecimal a valores RGB normalizados
   const bigint = parseInt(hex, 16);
@@ -281,7 +288,9 @@ function hexToNormalizedHue(hex) {
   // Convertir RGB a HSL
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
-  let h, s, l = (max + min) / 2;
+  let h,
+    s,
+    l = (max + min) / 2;
 
   if (max === min) {
     h = s = 0; // Desaturado
@@ -290,9 +299,15 @@ function hexToNormalizedHue(hex) {
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 
     switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
     }
 
     h /= 6;
@@ -301,129 +316,130 @@ function hexToNormalizedHue(hex) {
   return h;
 }
 
-    var dom = document.getElementById('timeLapse');
-    var myChart = echarts.init(dom, null, {
-      renderer: 'canvas',
-      useDirtyRect: false
-    });
-    var app = {};
+var dom = document.getElementById("timeLapse");
+var myChart = echarts.init(dom, null, {
+  renderer: "canvas",
+  useDirtyRect: false,
+});
+var app = {};
 
-    $.when(
-        $.getJSON("./data/years_data.json")
-    ).done(function (res){
-        const colorOccurrences = res;
-        const years = [];
-        for (let i = 0; i < colorOccurrences.length; ++i) {
-            if (years.length === 0 || years[years.length - 1] !== colorOccurrences[i][0]) {
-            years.push(colorOccurrences[i][0]);
-            }
-        }
-        
-        let startIndex = 1;
-        let startYear = years[startIndex];
+$.when($.getJSON("./data/years_data.json")).done(function (res) {
+  const colorOccurrences = res;
+  const years = [];
+  for (let i = 0; i < colorOccurrences.length; ++i) {
+    if (
+      years.length === 0 ||
+      years[years.length - 1] !== colorOccurrences[i][0]
+    ) {
+      years.push(colorOccurrences[i][0]);
+    }
+  }
 
-        const option = {
-            grid: {
-                top: 10,
-                bottom: 30,
-                left: 150,
-                right: 80
-            },
-            xAxis: {
-                max: 'dataMax',
-                axisLabel: {
-                    formatter: function (n) {
-                        return Math.round(n);
-                    }
-                }
-            },
-            dataset: {
-                 source: colorOccurrences.slice(1).filter(function (d) {
-                    return d[0] === startYear;
-                    })
-            },
-            yAxis: {
-                type: 'category',
-                inverse: true,
-                max: 12,
-                axisLabel: {
-                  show: true,
-                  fontSize: 14,
-                  formatter: function (value) {
-                      return translateMapping[value];
-                  }
-                },
-                animationDuration: 300,
-                animationDurationUpdate: 300
-            },
-            series: [
-                {
-                    realtimeSort: true,
-                    seriesLayoutBy: 'column',
-                    type: 'bar',
-                    itemStyle: {
-                        color: function (param) {
-                            return param.value[1];
-                        }
-                    },
-                    encode: {
-                        x: 2,  // Ajusta según tu estructura de datos
-                        y: 1   // Ajusta según tu estructura de datos
-                    },
-                    label: {
-                        show: true,
-                        precision: 1,
-                        position: 'right',
-                        valueAnimation: true,
-                        fontFamily: 'monospace'
-                    }
-                }
-            ],
-            // Disable init animation.
-            animationDuration: 0,
-            animationEasing: 'linear',
-            graphic: {
-                elements: [
-                    {
-                        type: 'text',
-                        right: 160,
-                        bottom: 60,
-                        style: {
-                            text: '2000',  // Ajusta según tu estructura de datos
-                            font: 'bolder 80px monospace',
-                            fill: 'rgba(100, 100, 100, 0.25)'
-                        },
-                        z: 100
-                    }
-                ]
-            }
-        };
-        myChart.setOption(option);
+  let startIndex = 1;
+  let startYear = years[startIndex];
 
-        document.getElementById('resetButton').addEventListener('click', function () {
-          startYear = years[startIndex];  // Restablece el año inicial
-          updateYear(startYear);  // Llama a la función de actualización con el año inicial
-          
-                  for (let i = startIndex; i < years.length - 1; ++i) {
-                      (function (i) {
-                      setTimeout(function () {
-                          updateYear(years[i + 1]);
-                      }, (i - startIndex) * 800);
-                      })(i);
-                  }
-                  function updateYear(year) {
-                      let source = colorOccurrences.slice(1).filter(function (d) {
-                      return d[0] === year;
-                      });
-                      option.series[0].data = source;
-                      option.graphic.elements[0].style.text = year;
-                      myChart.setOption(option);
-          
-                       if (year === years[years.length - 1]) {
-                          setTimeout(function () {
-                          }, 2000);
-                        }
-                  }
-        });
+  const option = {
+    grid: {
+      top: 10,
+      bottom: 30,
+      left: 150,
+      right: 80,
+    },
+    xAxis: {
+      max: "dataMax",
+      axisLabel: {
+        formatter: function (n) {
+          return Math.round(n);
+        },
+      },
+    },
+    dataset: {
+      source: colorOccurrences.slice(1).filter(function (d) {
+        return d[0] === startYear;
+      }),
+    },
+    yAxis: {
+      type: "category",
+      inverse: true,
+      max: 12,
+      axisLabel: {
+        show: true,
+        fontSize: 14,
+        formatter: function (value) {
+          return translateMapping[value];
+        },
+      },
+      animationDuration: 300,
+      animationDurationUpdate: 300,
+    },
+    series: [
+      {
+        realtimeSort: true,
+        seriesLayoutBy: "column",
+        type: "bar",
+        itemStyle: {
+          color: function (param) {
+            return param.value[1];
+          },
+        },
+        encode: {
+          x: 2, // Ajusta según tu estructura de datos
+          y: 1, // Ajusta según tu estructura de datos
+        },
+        label: {
+          show: true,
+          precision: 1,
+          position: "right",
+          valueAnimation: true,
+          fontFamily: "monospace",
+        },
+      },
+    ],
+    // Disable init animation.
+    animationDuration: 0,
+    animationEasing: "linear",
+    graphic: {
+      elements: [
+        {
+          type: "text",
+          right: 160,
+          bottom: 60,
+          style: {
+            text: "2000", // Ajusta según tu estructura de datos
+            font: "bolder 80px monospace",
+            fill: "rgba(100, 100, 100, 0.25)",
+          },
+          z: 100,
+        },
+      ],
+    },
+  };
+  myChart.setOption(option);
 
-        window.addEventListener('resize', myChart.resize);})
+  document.getElementById("resetButton").addEventListener("click", function () {
+    startYear = years[startIndex]; // Restablece el año inicial
+    updateYear(startYear); // Llama a la función de actualización con el año inicial
+
+    for (let i = startIndex; i < years.length - 1; ++i) {
+      (function (i) {
+        setTimeout(function () {
+          updateYear(years[i + 1]);
+        }, (i - startIndex) * 800);
+      })(i);
+    }
+    function updateYear(year) {
+      let source = colorOccurrences.slice(1).filter(function (d) {
+        return d[0] === year;
+      });
+      option.series[0].data = source;
+      option.graphic.elements[0].style.text = year;
+      myChart.setOption(option);
+
+      if (year === years[years.length - 1]) {
+        setTimeout(function () {}, 2000);
+      }
+    }
+  });
+
+  window.addEventListener("resize", myChart.resize);
+});
