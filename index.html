@@ -5,6 +5,9 @@
   <!-- Usar el CDN de jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.common.min.js"></script>
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
 <script src='./ecStat.js'></script>
 <script>
 
@@ -193,19 +196,28 @@
         observar un predominio del gris y el marrón.
       </p>
 
-      <div class="imgCentered" id="new"style="width: 600px;height:400px;">
+      <div class="imgCentered" id="pastel"style="width: 600px;height:400px;">
       </div>
 
       <p>
-        La tercera como se esparcen los colores por oscuro/brillante y calido/frio en un axys
+        La siguiente gráfica muestra como se distribuyen los colores si tenemos en cuenta 
+        sus tonos. Los ejes Y y X representan que tan brillantes o cálidos son un color. En el caso 
+        de la calidez, los valores fueron calculados mediante por el componente de matiz (HUE) 
+        y posteriormente normalizados, por lo que mientras más cercanos estén los valores a 0,5 
+        más frío será el color, en cambio valores cercanos a 0 o a 1 serían colores cálidos.
       </p>
 
-      <div class="imgCentered" id="main"style="width: 600px;height:400px;">
+      <div class="imgCentered" id="cluster"style="width: 1500px;height:500px;">
       </div>
 
       <p>
-      La segunda como han evolucionado en el tiempo los colores
+        Finalmente podemos ver cómo ha sido el uso en el tiempo de los colores y cómo las escalas 
+        de grises predominan.
       </p>
+
+      <div class="imgCentered" id="timeLapse"style="width: 800px;height:400px;">
+      </div>
+
 
     <!-- Conclusiones -->
     <section class="conclusiones">

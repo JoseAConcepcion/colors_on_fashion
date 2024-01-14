@@ -62,24 +62,24 @@ async function countUniqueColors(jsonPath) {
 
   return uniqueColors.size;
 }
+const translateMapping = {
+  black: "Negro",
+  gray: "Gris",
+  white: "Blanco",
+  brown: "Marrón",
+  red: "Rojo",
+  purple: "Púrpura",
+  green: "Verde",
+  yellow: "Amarillo",
+  blue: "Azul",
+  orange: "Naranja",
+  beige: "Beige",
+  pink: "Rosa",
+};
 
 // Obtener la cantidad de colores únicos y manejar cualquier error
 countUniqueColors(jsonPath)
   .then((uniqueColorCount) => {
-    const translateMapping = {
-      black: "Negro",
-      gray: "Gris",
-      white: "Blanco",
-      brown: "Marrón",
-      red: "Rojo",
-      purple: "Púrpura",
-      green: "Verde",
-      yellow: "Amarillo",
-      blue: "Azul",
-      orange: "Naranja",
-      beige: "Beige",
-      pink: "Rosa",
-    };
 
     const Pasteldata = Object.entries(colorOccurrences).map(
       ([color, count]) => ({
@@ -125,7 +125,7 @@ countUniqueColors(jsonPath)
       ],
     };
 
-    var myChart = echarts.init(document.getElementById("new"));
+    var myChart = echarts.init(document.getElementById("pastel"));
     myChart.setOption(pastelStyle);
   })
   .catch((error) => {
@@ -133,137 +133,293 @@ countUniqueColors(jsonPath)
   });
 
 
+  async function getColorData(jsonPath) {
+  const response = await fetch(jsonPath);
 
-var chartDom = document.getElementById("main");
-var myChart = echarts.init(chartDom);
-var option;
+  if (!response.ok) {
+    throw new Error(`No se pudo cargar el archivo JSON. Código de estado: ${response.status}`);
+  }
 
-// See https://github.com/ecomfe/echarts-stat
-echarts.registerTransform(ecStat.transform.clustering);
-const data = [
-  [256, 256],
-  [-256, 256],
-  [-256, -256],
-  [256, -256],
-  [256, 256],
-  [0, 0],
-  [256, 8],
-  [-5, -8],
-];
-var CLUSTER_COUNT = 2;
-var DIENSIION_CLUSTER_INDEX = 2;
-var COLOR_ALL = [
-  "#37A2DA",
-  "#e06343",
-  "#37a354",
-  "#b55dba",
-  "#b5bd48",
-  "#8378EA",
-  "#96BFFF",
-];
-var pieces = [];
-for (var i = 0; i < CLUSTER_COUNT; i++) {
-  pieces.push({
-    value: i,
-    label: "cluster " + i,
-    color: COLOR_ALL[i],
-  });
+  const jsonData = await response.json();
+  const colorDataList = [];
+
+  // Iterar sobre los datos JSON
+  for (const year in jsonData) {
+    for (const month in jsonData[year]) {
+      for (const day in jsonData[year][month]) {
+        const entries = jsonData[year][month][day];
+        for (const entry of entries) {
+          const hexColors = entry.hex;
+          for (const hexColor of hexColors) {
+            const colorData = [hexToNormalizedHue(hexColor), calculateLuminance(hexToRgb(hexColor))];
+            colorDataList.push(colorData);
+          }
+        }
+      }
+    }
+  }
+
+  return colorDataList;
 }
-option = {
-  dataset: [
-    {
-      source: data,
-    },
-    {
-      transform: {
-        type: "ecStat:clustering",
-        // print: true,
-        config: {
-          clusterCount: CLUSTER_COUNT,
-          outputType: "single",
-          outputClusterIndexDimension: DIENSIION_CLUSTER_INDEX,
+
+getColorData(jsonPath)
+  .then(colorDataList => {
+    console.log("Lista de objetos de datos de colores:", colorDataList);
+    echarts.registerTransform(ecStat.transform.clustering);
+   
+    var CLUSTER_COUNT = 2;
+    var DIENSIION_CLUSTER_INDEX = 2;
+    var COLOR_ALL = [
+      "#37A2DA",
+      "#e06343",
+      "#37a354",
+      "#b55dba",
+      "#b5bd48",
+      "#8378EA",
+      "#96BFFF",
+    ];
+    var pieces = [];
+    for (var i = 0; i < CLUSTER_COUNT; i++) {
+      pieces.push({
+        value: i,
+        label: "cluster " + i,
+        color: COLOR_ALL[i],
+      });
+    }
+    option = {
+      dataset: [
+        {
+          source: colorDataList,
         },
+        {
+          transform: {
+            type: "ecStat:clustering",
+            // print: true,
+            config: {
+              clusterCount: CLUSTER_COUNT,
+              outputType: "single",
+              outputClusterIndexDimension: DIENSIION_CLUSTER_INDEX,
+            },
+          },
+        },
+      ],
+      tooltip: {
+        position: "top",
       },
-    },
-  ],
-  tooltip: {
-    position: "top",
-  },
-  visualMap: {
-    type: "piecewise",
-    top: "middle",
-    min: 0,
-    max: CLUSTER_COUNT,
-    left: 10,
-    splitNumber: CLUSTER_COUNT,
-    dimension: DIENSIION_CLUSTER_INDEX,
-    pieces: pieces,
-  },
-  grid: {
-    left: 120,
-  },
-  xAxis: {},
-  yAxis: {},
-  series: {
-    type: "scatter",
-    encode: { tooltip: [0, 1] },
-    symbolSize: 15,
-    itemStyle: {
-      borderColor: "#555",
-    },
-    datasetIndex: 1,
-  },
-};
-option && myChart.setOption(option);
+      visualMap: {
+        type: "piecewise",
+        top: "middle",
+        min: 0,
+        max: 3,
+        left: 10,
+        splitNumber: CLUSTER_COUNT,
+        dimension: DIENSIION_CLUSTER_INDEX,
+        pieces: pieces,
+      },
+      grid: {
+        left: 'center',
+        width: '50%', // Puedes ajustar el ancho de la tabla según tus necesidades
+        height: '80%',
+      },
+      xAxis: {
+        name: "Calidez",
+      },
+      yAxis: {
+        name: "Luminosidad",
+      },
+      series: {
+        type: "scatter",
+        encode: { tooltip: [0, 1] },
+        symbolSize: 15,
+        itemStyle: {
+          borderColor: "#555",
+        },
+        datasetIndex: 1,
+      },
+    };
+    var chartDom = document.getElementById("cluster");
+    var myChart = echarts.init(chartDom);
+    // var option;
+    option && myChart.setOption(option);
+  })
+  .catch(error => {
+    console.error(error.message);
+  });
 
 
-// fetch("./data/data.json")
-//   .then((response) => response.json())
-//   .then((data) => {
-//     const tableContainer = document.getElementById("table-container");
 
-//     // Lógica para crear la tabla utilizando los datos del JSON
-//     const colorTable = createColorTable(data);
-//     tableContainer.appendChild(colorTable);
-//   })
-//   .catch((error) => {
-//     console.error("Error al cargar el archivo JSON:", error);
-//   });
 
-// function createColorTable(data) {
-//   const table = document.createElement("table");
-//   table.border = "2";
-//   table.style.width = "100%"; // Ajustar el ancho de la tabla
+function hexToRgb(hex) {
+  // Eliminar el carácter "#" si está presente
+  hex = hex.replace(/^#/, '');
 
-//   // Recorrer el JSON para extraer los colores
-//   for (const year in data) {
-//     for (const month in data[year]) {
-//       for (const day in data[year][month]) {
-//         const dayData = data[year][month][day];
-//         const dayColors = dayData.map((item) => item.hex).flat(); // Obtener todos los colores del día
+  // Convertir el código hexadecimal a valores RGB normalizados
+  const bigint = parseInt(hex, 16);
+  const r = ((bigint >> 16) & 255) / 255;
+  const g = ((bigint >> 8) & 255) / 255;
+  const b = (bigint & 255) / 255;
 
-//         // Crear una fila por cada conjunto de colores
-//         const row = table.insertRow();
-//         const cellDay = row.insertCell(0);
-//         cellDay.innerHTML = `${year}-${month}-${day}`;
-//         cellDay.style.width = "150px"; // Ajustar el ancho de la celda para la fecha
+  return { r, g, b };
+}
 
-//         const cellColors = row.insertCell(1);
-//         cellColors.style.width = "calc(100% - 150px)"; // Ajustar el ancho de la celda para los colores
-//         cellColors.style.whiteSpace = "nowrap"; // Evitar que los colores se rompan en varias líneas
+function calculateLuminance(rgb) {
+  // Calcular el nivel de luminosidad usando la fórmula WCAG
+  const luminance = 0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b;
+  return luminance;
+}
 
-//         for (const color of dayColors) {
-//           const colorBox = document.createElement("div");
-//           colorBox.style.backgroundColor = color;
-//           colorBox.style.width = "30px";
-//           colorBox.style.height = "30px";
-//           colorBox.style.marginRight = "5px";
-//           colorBox.style.display = "inline-block"; // Mostrar los colores en línea
-//           cellColors.appendChild(colorBox);
-//         }
-//       }
-//     }
-//   }
+function hexToNormalizedHue(hex) {
+  // Eliminar el carácter "#" si está presente
+  hex = hex.replace(/^#/, '');
 
-//   return table;
-// }
+  // Convertir el código hexadecimal a valores RGB normalizados
+  const bigint = parseInt(hex, 16);
+  const r = ((bigint >> 16) & 255) / 255;
+  const g = ((bigint >> 8) & 255) / 255;
+  const b = (bigint & 255) / 255;
+
+  // Convertir RGB a HSL
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+
+  if (max === min) {
+    h = s = 0; // Desaturado
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+
+    h /= 6;
+  }
+
+  return h;
+}
+
+    var dom = document.getElementById('timeLapse');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    var app = {};
+
+    $.when(
+        $.getJSON("./data/years_data.json")
+    ).done(function (res){
+        const colorOccurrences = res;
+        const years = [];
+        for (let i = 0; i < colorOccurrences.length; ++i) {
+            if (years.length === 0 || years[years.length - 1] !== colorOccurrences[i][0]) {
+            years.push(colorOccurrences[i][0]);
+            }
+        }
+        
+        let startIndex = 1;
+        let startYear = years[startIndex];
+        // console.log(startYear)
+
+        const option = {
+            grid: {
+                top: 10,
+                bottom: 30,
+                left: 150,
+                right: 80
+            },
+            xAxis: {
+                max: 'dataMax',
+                axisLabel: {
+                    formatter: function (n) {
+                        return Math.round(n);
+                    }
+                }
+            },
+            dataset: {
+                 source: colorOccurrences.slice(1).filter(function (d) {
+                    return d[0] === startYear;
+                    })
+            },
+            yAxis: {
+                type: 'category',
+                inverse: true,
+                max: 12,
+                axisLabel: {
+                  show: true,
+                  fontSize: 14,
+                  formatter: function (value) {
+                      return translateMapping[value];
+                  }
+                },
+                animationDuration: 300,
+                animationDurationUpdate: 300
+            },
+            series: [
+                {
+                    realtimeSort: true,
+                    seriesLayoutBy: 'column',
+                    type: 'bar',
+                    itemStyle: {
+                        color: function (param) {
+                            return param.value[1];
+                        }
+                    },
+                    encode: {
+                        x: 2,  // Ajusta según tu estructura de datos
+                        y: 1   // Ajusta según tu estructura de datos
+                    },
+                    label: {
+                        show: true,
+                        precision: 1,
+                        position: 'right',
+                        valueAnimation: true,
+                        fontFamily: 'monospace'
+                    }
+                }
+            ],
+            // Disable init animation.
+            animationDuration: 0,
+            animationEasing: 'linear',
+            graphic: {
+                elements: [
+                    {
+                        type: 'text',
+                        right: 160,
+                        bottom: 60,
+                        style: {
+                            text: '2000',  // Ajusta según tu estructura de datos
+                            font: 'bolder 80px monospace',
+                            fill: 'rgba(100, 100, 100, 0.25)'
+                        },
+                        z: 100
+                    }
+                ]
+            }
+        };
+        myChart.setOption(option);
+        for (let i = startIndex; i < years.length - 1; ++i) {
+            (function (i) {
+            setTimeout(function () {
+                updateYear(years[i + 1]);
+            }, (i - startIndex) * 1000);
+            })(i);
+        }
+        function updateYear(year) {
+            let source = colorOccurrences.slice(1).filter(function (d) {
+            return d[0] === year;
+            });
+            option.series[0].data = source;
+            option.graphic.elements[0].style.text = year;
+            myChart.setOption(option);
+
+             if (year === years[years.length - 1]) {
+                setTimeout(function () {
+                    updateData();
+                }, 2000);
+              }
+        }
+       
+        window.addEventListener('resize', myChart.resize);})
