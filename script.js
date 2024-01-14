@@ -167,22 +167,22 @@ getColorData(jsonPath)
     console.log("Lista de objetos de datos de colores:", colorDataList);
     echarts.registerTransform(ecStat.transform.clustering);
    
-    var CLUSTER_COUNT = 2;
+    var CLUSTER_COUNT = 6;
     var DIENSIION_CLUSTER_INDEX = 2;
     var COLOR_ALL = [
+      "#b55dba",
       "#37A2DA",
       "#e06343",
-      "#37a354",
-      "#b55dba",
-      "#b5bd48",
-      "#8378EA",
       "#96BFFF",
+      "#37a354",
+      "#b5bd48",
     ];
     var pieces = [];
+
     for (var i = 0; i < CLUSTER_COUNT; i++) {
       pieces.push({
         value: i,
-        label: "cluster " + i,
+        label: "Conjunto " + (i+1),
         color: COLOR_ALL[i],
       });
     }
@@ -194,7 +194,7 @@ getColorData(jsonPath)
         {
           transform: {
             type: "ecStat:clustering",
-            // print: true,
+            print: true,  
             config: {
               clusterCount: CLUSTER_COUNT,
               outputType: "single",
@@ -321,7 +321,6 @@ function hexToNormalizedHue(hex) {
         
         let startIndex = 1;
         let startYear = years[startIndex];
-        // console.log(startYear)
 
         const option = {
             grid: {
@@ -400,26 +399,31 @@ function hexToNormalizedHue(hex) {
             }
         };
         myChart.setOption(option);
-        for (let i = startIndex; i < years.length - 1; ++i) {
-            (function (i) {
-            setTimeout(function () {
-                updateYear(years[i + 1]);
-            }, (i - startIndex) * 1000);
-            })(i);
-        }
-        function updateYear(year) {
-            let source = colorOccurrences.slice(1).filter(function (d) {
-            return d[0] === year;
-            });
-            option.series[0].data = source;
-            option.graphic.elements[0].style.text = year;
-            myChart.setOption(option);
 
-             if (year === years[years.length - 1]) {
-                setTimeout(function () {
-                    updateData();
-                }, 2000);
-              }
-        }
-       
+        document.getElementById('resetButton').addEventListener('click', function () {
+          startYear = years[startIndex];  // Restablece el año inicial
+          updateYear(startYear);  // Llama a la función de actualización con el año inicial
+          
+                  for (let i = startIndex; i < years.length - 1; ++i) {
+                      (function (i) {
+                      setTimeout(function () {
+                          updateYear(years[i + 1]);
+                      }, (i - startIndex) * 800);
+                      })(i);
+                  }
+                  function updateYear(year) {
+                      let source = colorOccurrences.slice(1).filter(function (d) {
+                      return d[0] === year;
+                      });
+                      option.series[0].data = source;
+                      option.graphic.elements[0].style.text = year;
+                      myChart.setOption(option);
+          
+                       if (year === years[years.length - 1]) {
+                          setTimeout(function () {
+                          }, 2000);
+                        }
+                  }
+        });
+
         window.addEventListener('resize', myChart.resize);})
