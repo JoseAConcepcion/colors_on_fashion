@@ -4,37 +4,220 @@ window.addEventListener("scroll", function () {
   let imagen = document.querySelector(".imagen img");
   let scrollActual = window.scrollY;
 
-  if (scrollActual > 20) {
+  if (scrollActual > 2000) {
     let colorIndex = Math.floor(scrollActual / 1000); // Calcula el índice del color cada 100px
     let colors = [
-      "#FFC0CB",
-      "#c0ffc4",
-      "blue",
-      "yellow",
-      "green",
-      "red",
-      "orange",
-      "#ABCDEF",
-      "purple",
-      "#FA8072",
-      "#90EE90",
-      "#FFD700",
-      "#7B68EE",
-      "#00CED1",
-      "#FF6347",
+      // "#FFC0CB",
+      // "#c0ffc4",
+      // "orange",
+      // "blue",
+      // "red",
+      // "yellow",
+      // "green",
+      // "#FF6347",
+      // "yellow",
     ]; // Colores adicionales
     let color = colors[colorIndex % colors.length]; // Obtiene un color de la lista de colores
 
-    // elemento2.style.backgroundColor = color;
+    elemento2.style.backgroundColor = color;
     // elemento.style.backgroundColor = color;
-    imagen.style.filter = `hue-rotate(${colorIndex * 30}deg)`;
+    // imagen.style.filter = `hue-rotate(${colorIndex * 30}deg)`;
   } else {
     // elemento.style.backgroundColor = ''; // Restaura el color por defecto
     // elemento2.style.backgroundColor = ''; // Restaura el color por defecto
   }
 });
 
-// fetch("./data.json")
+// Suponiendo que tu JSON está en una ruta específica
+const jsonPath = "./data/data.json";
+const colorOccurrences = {};
+const uniqueColors = new Set();
+
+async function countUniqueColors(jsonPath) {
+  const response = await fetch(jsonPath);
+
+  if (!response.ok) {
+    throw new Error(
+      `No se pudo cargar el archivo JSON. Código de estado: ${response.status}`
+    );
+  }
+
+  const jsonData = await response.json();
+
+  // Iterar sobre los datos JSON
+  for (const year in jsonData) {
+    for (const month in jsonData[year]) {
+      for (const day in jsonData[year][month]) {
+        const entries = jsonData[year][month][day];
+        for (const entry of entries) {
+          const colors = entry.color;
+          for (const color of colors) {
+            colorOccurrences[color] = (colorOccurrences[color] || 0) + 1;
+            uniqueColors.add(color);
+          }
+        }
+      }
+    }
+  }
+
+  return uniqueColors.size;
+}
+
+// Obtener la cantidad de colores únicos y manejar cualquier error
+countUniqueColors(jsonPath)
+  .then((uniqueColorCount) => {
+    const translateMapping = {
+      black: "Negro",
+      gray: "Gris",
+      white: "Blanco",
+      brown: "Marrón",
+      red: "Rojo",
+      purple: "Púrpura",
+      green: "Verde",
+      yellow: "Amarillo",
+      blue: "Azul",
+      orange: "Naranja",
+      beige: "Beige",
+      pink: "Rosa",
+    };
+
+    const Pasteldata = Object.entries(colorOccurrences).map(
+      ([color, count]) => ({
+        value: count,
+        name: translateMapping[color] || color,
+        itemStyle: {
+          color: color,
+        },
+      })
+    );
+
+    const pastelStyle = {
+      title: {
+        text: "Ocurrencias de colores simples",
+        subtext: "Basado en portadas de Vogue",
+        left: "center",
+      },
+      tooltip: {
+        trigger: "item",
+        formatter: "{a} <br/>{b} : {c} ({d}%)",
+      },
+      legend: {
+        bottom: 5,
+        left: "center",
+        data: translateMapping[Object.keys(colorOccurrences)],
+      },
+      series: [
+        {
+          name: "Número de apariciones",
+          type: "pie",
+          radius: "65%",
+          center: ["50%", "50%"],
+          selectedMode: "single",
+          data: Pasteldata,
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: "rgba(0, 0, 0, 0.5)",
+            },
+          },
+        },
+      ],
+    };
+
+    var myChart = echarts.init(document.getElementById("new"));
+    myChart.setOption(pastelStyle);
+  })
+  .catch((error) => {
+    console.error(error.message);
+  });
+
+
+
+var chartDom = document.getElementById("main");
+var myChart = echarts.init(chartDom);
+var option;
+
+// See https://github.com/ecomfe/echarts-stat
+echarts.registerTransform(ecStat.transform.clustering);
+const data = [
+  [256, 256],
+  [-256, 256],
+  [-256, -256],
+  [256, -256],
+  [256, 256],
+  [0, 0],
+  [256, 8],
+  [-5, -8],
+];
+var CLUSTER_COUNT = 2;
+var DIENSIION_CLUSTER_INDEX = 2;
+var COLOR_ALL = [
+  "#37A2DA",
+  "#e06343",
+  "#37a354",
+  "#b55dba",
+  "#b5bd48",
+  "#8378EA",
+  "#96BFFF",
+];
+var pieces = [];
+for (var i = 0; i < CLUSTER_COUNT; i++) {
+  pieces.push({
+    value: i,
+    label: "cluster " + i,
+    color: COLOR_ALL[i],
+  });
+}
+option = {
+  dataset: [
+    {
+      source: data,
+    },
+    {
+      transform: {
+        type: "ecStat:clustering",
+        // print: true,
+        config: {
+          clusterCount: CLUSTER_COUNT,
+          outputType: "single",
+          outputClusterIndexDimension: DIENSIION_CLUSTER_INDEX,
+        },
+      },
+    },
+  ],
+  tooltip: {
+    position: "top",
+  },
+  visualMap: {
+    type: "piecewise",
+    top: "middle",
+    min: 0,
+    max: CLUSTER_COUNT,
+    left: 10,
+    splitNumber: CLUSTER_COUNT,
+    dimension: DIENSIION_CLUSTER_INDEX,
+    pieces: pieces,
+  },
+  grid: {
+    left: 120,
+  },
+  xAxis: {},
+  yAxis: {},
+  series: {
+    type: "scatter",
+    encode: { tooltip: [0, 1] },
+    symbolSize: 15,
+    itemStyle: {
+      borderColor: "#555",
+    },
+    datasetIndex: 1,
+  },
+};
+option && myChart.setOption(option);
+
+
+// fetch("./data/data.json")
 //   .then((response) => response.json())
 //   .then((data) => {
 //     const tableContainer = document.getElementById("table-container");
@@ -84,209 +267,3 @@ window.addEventListener("scroll", function () {
 
 //   return table;
 // }
-
-//Tablas
-
-
-option2 = {
-  title: {
-    text: 'Weather Statistics',
-    subtext: 'Fake Data',
-    left: 'center'
-  },
-  tooltip: {
-    trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ({d}%)'
-  },
-  legend: {
-    bottom: 10,
-    left: 'center',
-    data: ['CityA', 'CityB', 'CityD', 'CityC', 'CityE']
-  },
-  series: [
-    {
-      type: 'pie',
-      radius: '65%',
-      center: ['50%', '50%'],
-      selectedMode: 'single',
-      data: [
-        {
-          value: 1548,
-          name: 'CityE',
-          label: {
-            formatter: [
-              '{title|{b}}{abg|}',
-              '  {weatherHead|Weather}{valueHead|Days}{rateHead|Percent}',
-              '{hr|}',
-              '  {Sunny|}{value|202}{rate|55.3%}',
-              '  {Cloudy|}{value|142}{rate|38.9%}',
-              '  {Showers|}{value|21}{rate|5.8%}'
-            ].join('\n'),
-            backgroundColor: '#eee',
-            borderColor: '#777',
-            borderWidth: 1,
-            borderRadius: 4,
-            rich: {
-              title: {
-                color: '#eee',
-                align: 'center'
-              },
-              abg: {
-                backgroundColor: '#333',
-                width: '100%',
-                align: 'right',
-                height: 25,
-                borderRadius: [4, 4, 0, 0]
-              },
-              Sunny: {
-                height: 30,
-                align: 'left',
-              },
-              Cloudy: {
-                height: 30,
-                align: 'left',
-              },
-              Showers: {
-                height: 30,
-                align: 'left',
-              },
-              weatherHead: {
-                color: '#333',
-                height: 24,
-                align: 'left'
-              },
-              hr: {
-                borderColor: '#777',
-                width: '100%',
-                borderWidth: 0.5,
-                height: 0
-              },
-              value: {
-                width: 20,
-                padding: [0, 20, 0, 30],
-                align: 'left'
-              },
-              valueHead: {
-                color: '#333',
-                width: 20,
-                padding: [0, 20, 0, 30],
-                align: 'center'
-              },
-              rate: {
-                width: 40,
-                align: 'right',
-                padding: [0, 10, 0, 0]
-              },
-              rateHead: {
-                color: '#333',
-                width: 40,
-                align: 'center',
-                padding: [0, 10, 0, 0]
-              }
-            }
-          }
-        },
-        { value: 735, name: 'CityC' },
-        { value: 510, name: 'CityD' },
-        { value: 434, name: 'CityB' },
-        { value: 335, name: 'CityA' }
-      ],
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
-        }
-      }
-    }
-  ]
-};
-
-var myChart2 = echarts.init(document.getElementById("new"));
-
-myChart2.setOption(option2);
-
-
-
-var chartDom = document.getElementById('main');
-var myChart = echarts.init(chartDom);
-var option;
-
-// See https://github.com/ecomfe/echarts-stat
-echarts.registerTransform(ecStat.transform.clustering);
-const data = [
-  [256, 256],
-  [-256, 256],
-  [-256, -256],
-  [256, -256],
-  [256, 256],
-  [0, 0],
-  [256, 8],
-  [-5, -8]
-];
-var CLUSTER_COUNT = 2;
-var DIENSIION_CLUSTER_INDEX = 2;
-var COLOR_ALL = [
-  '#37A2DA',
-  '#e06343',
-  '#37a354',
-  '#b55dba',
-  '#b5bd48',
-  '#8378EA',
-  '#96BFFF'
-];
-var pieces = [];
-for (var i = 0; i < CLUSTER_COUNT; i++) {
-  pieces.push({
-    value: i,
-    label: 'cluster ' + i,
-    color: COLOR_ALL[i]
-  });
-}
-option = {
-  dataset: [
-    {
-      source: data
-    },
-    {
-      transform: {
-        type: 'ecStat:clustering',
-        // print: true,
-        config: {
-          clusterCount: CLUSTER_COUNT,
-          outputType: 'single',
-          outputClusterIndexDimension: DIENSIION_CLUSTER_INDEX
-        }
-      }
-    }
-  ],
-  tooltip: {
-    position: 'top'
-  },
-  visualMap: {
-    type: 'piecewise',
-    top: 'middle',
-    min: 0,
-    max: CLUSTER_COUNT,
-    left: 10,
-    splitNumber: CLUSTER_COUNT,
-    dimension: DIENSIION_CLUSTER_INDEX,
-    pieces: pieces
-  },
-  grid: {
-    left: 120
-  },
-  xAxis: {},
-  yAxis: {},
-  series: {
-    type: 'scatter',
-    encode: { tooltip: [0, 1] },
-    symbolSize: 15,
-    itemStyle: {
-      borderColor: '#555'
-    },
-    datasetIndex: 1
-  }
-};
-
-option && myChart.setOption(option);
