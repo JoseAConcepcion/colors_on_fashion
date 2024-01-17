@@ -1,3 +1,4 @@
+
 window.addEventListener("scroll", function () {
   // let elemento = document.querySelector('.desarrollo');
   let elemento2 = document.querySelector(".parrafo");
@@ -22,7 +23,7 @@ window.addEventListener("scroll", function () {
   } else if (scrollActual > 4000 && scrollActual <= 5000) {
     colorIndex = 3; // Cuarto color para el rango 4000px en adelante
   }
-    else if (scrollActual > 5000 && scrollActual <= 6000) {
+  else if (scrollActual > 5000 && scrollActual <= 6000) {
     colorIndex = 4; // Tercer color para el rango 3000-4000px
   }
 
@@ -33,6 +34,7 @@ window.addEventListener("scroll", function () {
     // Restaura el color por defecto si el scroll es menor a 1000px
     imagen.style.filter = "";
   }
+
 
   // if (scrollActual > 1000) {
   //   let colorIndex = Math.floor(scrollActual / 200); // Calcula el índice del color cada 100px

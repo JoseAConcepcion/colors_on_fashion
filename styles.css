@@ -82,8 +82,8 @@ p {
 }
 
 .desarrollo .imagen {
-  display: block;
-  flex: 0 1 40%;
+  display: flex;
+  flex: 0 1 28%;
   position: sticky;
   top: 5%;
   bottom: 50%;
@@ -91,6 +91,7 @@ p {
   /* aspect-ratio: 10/10; */
   /* margin-right: 20px; Espacio entre la imagen y el texto */
   margin: 0 auto;
+  background-color: #0d47a1 ;
 }
 
 .imagen img {
