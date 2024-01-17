@@ -1,38 +1,68 @@
 window.addEventListener("scroll", function () {
   // let elemento = document.querySelector('.desarrollo');
-  let elemento2 = document.querySelector(".contenido");
+  let elemento2 = document.querySelector(".parrafo");
   let imagen = document.querySelector(".imagen");
   let scrollActual = window.scrollY;
 
-  if (scrollActual > 1000) {
-    let colorIndex = Math.floor(scrollActual / 200); // Calcula el índice del color cada 100px
-    let colors = [
-      "gray",
-      "brown",
-      "white",
-      "black",
-      "orange",
-      "green",
-      "purple",
-      "blue",
-      "yellow",
-      "red",
-      "beige",
-      "pink",
-    ];
+  let colors = [
+    "#455678",
+    "gray",
+    "blue",
+    "brown",
+    "white",
+  ];
+  let colorIndex;
 
-    // Asegúrate de que el índice no sea mayor que la longitud de la lista de colores
-    colorIndex = colorIndex % colors.length;
+  if (scrollActual > 1000 && scrollActual <= 2000) {
+    colorIndex = 0; // Primer color para el rango 1000-2000px
+  } else if (scrollActual > 2000 && scrollActual <= 3000) {
+    colorIndex = 1; // Segundo color para el rango 2000-3000px
+  } else if (scrollActual > 3000 && scrollActual <= 4000) {
+    colorIndex = 2; // Tercer color para el rango 3000-4000px
+  } else if (scrollActual > 4000 && scrollActual <= 5000) {
+    colorIndex = 3; // Cuarto color para el rango 4000px en adelante
+  }
+    else if (scrollActual > 5000 && scrollActual <= 6000) {
+    colorIndex = 4; // Tercer color para el rango 3000-4000px
+  }
 
+  if (colorIndex !== undefined) {
     let color = colors[colorIndex]; // Obtiene un color de la lista de colores
-
-    // elemento2.style.backgroundColor = color;
-    // elemento.style.backgroundColor = color;
     imagen.style.filter = `hue-rotate(${colorIndex * 30}deg)`;
   } else {
-    elemento.style.backgroundColor = ""; // Restaura el color por defecto
-    elemento2.style.backgroundColor = ""; // Restaura el color por defecto
+    // Restaura el color por defecto si el scroll es menor a 1000px
+    imagen.style.filter = "";
   }
+
+  // if (scrollActual > 1000) {
+  //   let colorIndex = Math.floor(scrollActual / 200); // Calcula el índice del color cada 100px
+  //   let colors = [
+  //     "#455678",
+  //     "gray",
+  //     "brown",
+  //     "white",
+  //     // "black",
+  //     // "orange",
+  //     // "green",
+  //     // "purple",
+  //     // "blue",
+  //     // "yellow",
+  //     // "red",
+  //     // "beige",
+  //     // "pink",
+  //   ];
+  //   // Asegúrate de que el índice no sea mayor que la longitud de la lista de colores
+  //   colorIndex = colorIndex % colors.length;
+
+  //   let color = colors[colorIndex]; // Obtiene un color de la lista de colores
+
+  //   // elemento2.style.backgroundColor = color;
+  //   // elemento.style.backgroundColor = color;
+  //   imagen.style.filter = `hue-rotate(${colorIndex * 30}deg)`;
+  // } else {
+  //   elemento.style.backgroundColor = ""; // Restaura el color por defecto
+  //   elemento2.style.backgroundColor = ""; // Restaura el color por defecto
+  // }
 });
 
 // Suponiendo que tu JSON está en una ruta específica

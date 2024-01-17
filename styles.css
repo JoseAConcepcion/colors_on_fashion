@@ -1,12 +1,47 @@
 body {
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  /* font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
+  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 80px;
-  font-size: 25px;
+  font-size: 28px;
   text-align: justify;
   margin-left: auto; /* Centrar el contenido */
   margin-right: auto; /* Centrar el contenido */
+   background-color: #fafafa;
+    color: #333;
+    line-height: 1.6;
 }
+
+h1, h2, h3, h4, h5, h6 {
+    color: #1a237e;
+}
+
+p {
+    color: #212121;
+}
+
+a {
+    color: #1a237e;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0d47a1;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+p {
+    margin-bottom: 1em;
+}
+.parrafo {
+  margin-bottom: 1000px;
+}
+
 
 .imgCentered {
   display: block;
@@ -15,11 +50,11 @@ body {
 }
 
 .pie-pagina {
-      position: center;
+      position: relative;
       bottom: 0;
       left: 0;
       right: 0;
-      text-align: center;
+      text-align: left;
       /* background-color: rgba(0, 0, 0, 0.7); */
       color: rgb(13, 13, 13);
       padding: 8px;
@@ -48,18 +83,19 @@ body {
 
 .desarrollo .imagen {
   display: block;
-  flex: 0 0 40%;
+  flex: 0 1 40%;
   position: sticky;
   top: 5%;
   bottom: 50%;
   width: 25%;
-  margin-right: 20px; /* Espacio entre la imagen y el texto */
-
+  /* aspect-ratio: 10/10; */
+  /* margin-right: 20px; Espacio entre la imagen y el texto */
+  margin: 0 auto;
 }
 
 .imagen img {
   width: 80%;
-  height: auto;
+  height:fit-content;
 }
 
 .desarrollo .contenido {
@@ -94,3 +130,27 @@ body {
   flex: 1;
   text-align: justify; /* Justificar texto */
 }
+
+
+.historia {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  /* margin-left: auto;
+  margin-right: auto; */
+  padding: 20px;
+}
+
+.historia .imagen2 {
+  position: relative;
+  display: block;
+  flex: auto;
+  /* margin-left: 10%; */
+}
+
+.historia .contenido {
+  flex: 1;
+  padding-right: 200px;
+  text-align: justify; 
+}
+
