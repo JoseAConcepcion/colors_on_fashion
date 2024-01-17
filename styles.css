@@ -39,6 +39,9 @@ p {
     margin-bottom: 1em;
 }
 .parrafo {
+  display: inline-block;
+  width: 50%;
+  padding-left: 400px;
   margin-bottom: 1000px;
 }
 
@@ -88,8 +91,6 @@ p {
   top: 5%;
   bottom: 50%;
   width: 25%;
-  /* aspect-ratio: 10/10; */
-  /* margin-right: 20px; Espacio entre la imagen y el texto */
   margin: 0 auto;
   background-color: #0d47a1 ;
 }
@@ -146,11 +147,14 @@ p {
   position: relative;
   display: block;
   flex: auto;
+  margin-left: 200px;
   /* margin-left: 10%; */
 }
 
 .historia .contenido {
   flex: 1;
+   display: inline-block;
+  width: 50%;
   padding-right: 200px;
   text-align: justify; 
 }
