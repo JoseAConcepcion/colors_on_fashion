@@ -40,63 +40,6 @@ window.addEventListener("scroll", function () {
   }
 });
 
-// window.addEventListener("scroll", function () {
-//   // let elemento = document.querySelector('.desarrollo');
-//   let elemento2 = document.querySelector(".parrafo");
-//   let imagen = document.querySelector(".imagen");
-//   let scrollActual = window.scrollY;
-
-
-//   if (scrollActual > 1000 && scrollActual <= 1250) {
-//     imagen.style.backgroundColor = "#757170";
-//   } else if (scrollActual > 1250 && scrollActual <= 1500) {
-//     imagen.style.backgroundColor = "#545d4f";
-
-//   } else if (scrollActual > 1500 && scrollActual <= 1750) {
-//     imagen.style.backgroundColor = "#000000";
-
-//   } else if (scrollActual > 1750 && scrollActual <= 2000) {
-//     imagen.style.backgroundColor = "#d58b6b";
-    
-//   } else if (scrollActual > 2000 && scrollActual <= 2500) {
-//     imagen.style.backgroundColor = "#0d47a1";
-  
-//   } else if (scrollActual > 2500 && scrollActual <= 2750) {
-//     imagen.style.backgroundColor = "#b5af5a";
-
-//   } else if (scrollActual > 2750 && scrollActual <= 3000) {
-//     imagen.style.backgroundColor = "#3d5167";
-
-//   } else if (scrollActual > 3000 && scrollActual <= 3250) {
-//     imagen.style.backgroundColor = "#cc979c";
-
-//   } else if (scrollActual > 3250 && scrollActual <= 3500) {
-//     imagen.style.backgroundColor = "#3d5167";
-
-//   } else if (scrollActual > 3500 && scrollActual <= 4000) {
-//     imagen.style.backgroundColor = "#6f586a";
-
-//   } else if (scrollActual > 4000 && scrollActual <= 4500) {
-//     imagen.style.backgroundColor = "#b5b49c";
-
-//   } else if (scrollActual > 5000 && scrollActual <= 5500) {
-//     imagen.style.backgroundColor = "#391c20";
-
-//   } else if (scrollActual > 5500 && scrollActual <= 6000) {
-//     imagen.style.backgroundColor = "#59485b";
-
-//   } else if (scrollActual > 6000 && scrollActual <= 6500) {
-//     imagen.style.backgroundColor = "#c96667";
-     
-//   } else if (scrollActual > 6500 && scrollActual <= 7000) {
-//     imagen.style.backgroundColor = "#5a7b87";
-     
-//   } else if (scrollActual > 7000 && scrollActual <= 7400) {
-//     imagen.style.backgroundColor = "#ba3c21";
-//   }
-
-// });
-
 const jsonPath = "./data/data.json";
 const colorOccurrences = {};
 const uniqueColors = new Set();
