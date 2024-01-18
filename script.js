@@ -1,59 +1,101 @@
 window.addEventListener("scroll", function () {
-  // let elemento = document.querySelector('.desarrollo');
   let elemento2 = document.querySelector(".parrafo");
   let imagen = document.querySelector(".imagen");
   let scrollActual = window.scrollY;
+  let alturaTotal = document.documentElement.scrollHeight - window.innerHeight;
+  let porcentajeScroll = (scrollActual / alturaTotal) * 100;
 
-
-  if (scrollActual > 1000 && scrollActual <= 1250) {
+  if (porcentajeScroll > 15 && porcentajeScroll <= 20) {
     imagen.style.backgroundColor = "#757170";
-  } else if (scrollActual > 1250 && scrollActual <= 1500) {
+  } else if (porcentajeScroll > 20 && porcentajeScroll <= 22.5) {
     imagen.style.backgroundColor = "#545d4f";
-
-  } else if (scrollActual > 1500 && scrollActual <= 1750) {
+  } else if (porcentajeScroll > 22.5 && porcentajeScroll <= 25) {
     imagen.style.backgroundColor = "#000000";
-
-  } else if (scrollActual > 1750 && scrollActual <= 2000) {
+  } else if (porcentajeScroll > 25 && porcentajeScroll <= 27.5) {
     imagen.style.backgroundColor = "#d58b6b";
-    
-  } else if (scrollActual > 2000 && scrollActual <= 2500) {
+  } else if (porcentajeScroll > 27.5 && porcentajeScroll <= 30) {
     imagen.style.backgroundColor = "#0d47a1";
-  
-  } else if (scrollActual > 2500 && scrollActual <= 2750) {
+  } else if (porcentajeScroll > 30 && porcentajeScroll <= 35) {
     imagen.style.backgroundColor = "#b5af5a";
-
-  } else if (scrollActual > 2750 && scrollActual <= 3000) {
+  } else if (porcentajeScroll > 35 && porcentajeScroll <= 37.5) {
     imagen.style.backgroundColor = "#3d5167";
-
-  } else if (scrollActual > 3000 && scrollActual <= 3250) {
+  } else if (porcentajeScroll > 37.5 && porcentajeScroll <= 40) {
     imagen.style.backgroundColor = "#cc979c";
-
-  } else if (scrollActual > 3250 && scrollActual <= 3500) {
+  } else if (porcentajeScroll > 40 && porcentajeScroll <= 42.5) {
     imagen.style.backgroundColor = "#3d5167";
-
-  } else if (scrollActual > 3500 && scrollActual <= 4000) {
+  } else if (porcentajeScroll > 42.5 && porcentajeScroll <= 45) {
     imagen.style.backgroundColor = "#6f586a";
-
-  } else if (scrollActual > 4000 && scrollActual <= 4500) {
+  } else if (porcentajeScroll > 45 && porcentajeScroll <= 50) {
     imagen.style.backgroundColor = "#b5b49c";
-
-  } else if (scrollActual > 5000 && scrollActual <= 5500) {
+  } else if (porcentajeScroll > 50 && porcentajeScroll <= 55) {
     imagen.style.backgroundColor = "#391c20";
-
-  } else if (scrollActual > 5500 && scrollActual <= 6000) {
+  } else if (porcentajeScroll > 55 && porcentajeScroll <= 60) {
     imagen.style.backgroundColor = "#59485b";
-
-  } else if (scrollActual > 6000 && scrollActual <= 6500) {
+  } else if (porcentajeScroll > 60 && porcentajeScroll <= 65) {
     imagen.style.backgroundColor = "#c96667";
-     
-  } else if (scrollActual > 6500 && scrollActual <= 7000) {
+  } else if (porcentajeScroll > 65 && porcentajeScroll <= 70) {
     imagen.style.backgroundColor = "#5a7b87";
-     
-  } else if (scrollActual > 7000 && scrollActual <= 7400) {
+  } else if (porcentajeScroll > 70 && porcentajeScroll <= 75) {
     imagen.style.backgroundColor = "#ba3c21";
   }
-
 });
+
+// window.addEventListener("scroll", function () {
+//   // let elemento = document.querySelector('.desarrollo');
+//   let elemento2 = document.querySelector(".parrafo");
+//   let imagen = document.querySelector(".imagen");
+//   let scrollActual = window.scrollY;
+
+
+//   if (scrollActual > 1000 && scrollActual <= 1250) {
+//     imagen.style.backgroundColor = "#757170";
+//   } else if (scrollActual > 1250 && scrollActual <= 1500) {
+//     imagen.style.backgroundColor = "#545d4f";
+
+//   } else if (scrollActual > 1500 && scrollActual <= 1750) {
+//     imagen.style.backgroundColor = "#000000";
+
+//   } else if (scrollActual > 1750 && scrollActual <= 2000) {
+//     imagen.style.backgroundColor = "#d58b6b";
+    
+//   } else if (scrollActual > 2000 && scrollActual <= 2500) {
+//     imagen.style.backgroundColor = "#0d47a1";
+  
+//   } else if (scrollActual > 2500 && scrollActual <= 2750) {
+//     imagen.style.backgroundColor = "#b5af5a";
+
+//   } else if (scrollActual > 2750 && scrollActual <= 3000) {
+//     imagen.style.backgroundColor = "#3d5167";
+
+//   } else if (scrollActual > 3000 && scrollActual <= 3250) {
+//     imagen.style.backgroundColor = "#cc979c";
+
+//   } else if (scrollActual > 3250 && scrollActual <= 3500) {
+//     imagen.style.backgroundColor = "#3d5167";
+
+//   } else if (scrollActual > 3500 && scrollActual <= 4000) {
+//     imagen.style.backgroundColor = "#6f586a";
+
+//   } else if (scrollActual > 4000 && scrollActual <= 4500) {
+//     imagen.style.backgroundColor = "#b5b49c";
+
+//   } else if (scrollActual > 5000 && scrollActual <= 5500) {
+//     imagen.style.backgroundColor = "#391c20";
+
+//   } else if (scrollActual > 5500 && scrollActual <= 6000) {
+//     imagen.style.backgroundColor = "#59485b";
+
+//   } else if (scrollActual > 6000 && scrollActual <= 6500) {
+//     imagen.style.backgroundColor = "#c96667";
+     
+//   } else if (scrollActual > 6500 && scrollActual <= 7000) {
+//     imagen.style.backgroundColor = "#5a7b87";
+     
+//   } else if (scrollActual > 7000 && scrollActual <= 7400) {
+//     imagen.style.backgroundColor = "#ba3c21";
+//   }
+
+// });
 
 const jsonPath = "./data/data.json";
 const colorOccurrences = {};
